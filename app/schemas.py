@@ -2,6 +2,7 @@ from pydantic import BaseModel, model_validator
 from datetime import datetime, time
 from typing import Optional
 
+
 #USERS
 class UserBase(BaseModel):
     id: int
@@ -15,7 +16,6 @@ class UserCreate(BaseModel):
 class UserCredentials(BaseModel):
     email: str
     password: str
-
 
 
 class User(UserBase):
