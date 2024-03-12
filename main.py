@@ -41,3 +41,8 @@ def get_db():
 @app.post("/users", response_model=schemas.UserBase)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return users.create_user(db, user=user)
+
+# log in users
+@app.post("/users/login", response_model=schemas.Token)
+def login_user(user: schemas.UserCredentials, db: Session = Depends(get_db)):
+    return users.login_user(db, user=user)

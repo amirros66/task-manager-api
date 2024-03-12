@@ -17,6 +17,7 @@ class UserCredentials(BaseModel):
     password: str
 
 
+
 class User(UserBase):
     class Config:
         from_attributes = True

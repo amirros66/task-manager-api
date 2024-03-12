@@ -21,3 +21,15 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def login_user(db: Session, user: schemas.UserCredentials):
+    db_user = db.query(models.User).filter(
+        models.User.email == user.email).first()
+
+    user_password_error = "Incorrect username or password"
+
+    if db_user is None:
+        raise HTTPException(status_code=404, detail=user_password_error)
+    if not verify_password(user.password, db_user.password):
+        raise HTTPException(status_code=401, detail=user_password_error)
+    return {"access_token": db_user.email, "token_type": "bearer"}
