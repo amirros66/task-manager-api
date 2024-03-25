@@ -31,3 +31,29 @@ class Token(BaseModel):
 class TokenPayload(BaseModel):
     exp: int
     sub: str
+
+
+#Tasks
+
+class TaskBase(BaseModel):
+    id: int
+    name: str
+    description: str
+    completed: bool
+
+class TaskCreate(BaseModel):
+    name: str
+
+
+
+class Task(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None  # Allow None as a valid value
+    created_at: datetime
+    due_date: Optional[datetime] = None  # Allow None as a valid value
+    completed: bool
+    owner: User
+
+    class Config:
+        orm_mode = True
