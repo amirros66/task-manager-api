@@ -37,18 +37,18 @@ class TokenPayload(BaseModel):
 
 class TaskBase(BaseModel):
     id: int
-    name: str
+    title: str
     description: str
     completed: bool
 
 class TaskCreate(BaseModel):
-    name: str
+    title: str
 
 
 
 class Task(BaseModel):
     id: int
-    name: str
+    title: str
     description: Optional[str] = None  # Allow None as a valid value
     created_at: datetime
     due_date: Optional[datetime] = None  # Allow None as a valid value
