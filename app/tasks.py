@@ -8,12 +8,11 @@ from datetime import datetime
 
 
 def create_task(db: Session, user_id: int, task: schemas.TaskCreate):
-    # Assuming task is an instance of schemas.TaskCreate and has the necessary task details.
     db_task = models.Task(**task.dict(), owner_id=user_id)
     
     db.add(db_task)
-    db.commit()  # This commits the transaction, making the object persistent.
-    db.refresh(db_task)  # This refreshes the instance from the database.
+    db.commit()  
+    db.refresh(db_task)  
     return db_task
 
 
