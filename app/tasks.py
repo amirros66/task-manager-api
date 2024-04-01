@@ -36,3 +36,17 @@ def delete_task_by_user(db: Session, user_id: int, task_id: int):
     db.commit()
 
 
+#Update task status
+
+    
+def update_task_status(db: Session, user_id: int, task_id: int, new_status: str):
+    if new_status.lower() not in [status.value for status in models.TaskStatus]:
+        raise HTTPException(status_code=400, detail="Invalid status provided")
+
+    task = db.query(models.Task).filter(models.Task.id == task_id, models.Task.owner_id == user_id).first()
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    task.status = models.TaskStatus(new_status.lower())
+    db.commit()
+    return task

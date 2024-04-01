@@ -1,6 +1,7 @@
 from pydantic import BaseModel, model_validator
 from datetime import datetime, time
 from typing import Optional
+from app.models import TaskStatus
 
 
 #USERS
@@ -36,24 +37,28 @@ class TokenPayload(BaseModel):
 #Tasks
 
 class TaskBase(BaseModel):
+    title: str
+    # description: Optional[str] = None
+
+class TaskCreate(TaskBase):
+    pass
+
+class TaskUpdate(BaseModel):
+    title: Optional[str] = None
+    # description: Optional[str] = None
+    status: Optional[str] = None
+
+class Task(TaskBase):
     id: int
-    title: str
-    description: str
-    completed: bool
-
-class TaskCreate(BaseModel):
-    title: str
-
-
-
-class Task(BaseModel):
-    id: int
-    title: str
-    description: Optional[str] = None  # Allow None as a valid value
     created_at: datetime
-    due_date: Optional[datetime] = None  # Allow None as a valid value
-    completed: bool
-    owner: User
+    due_date: Optional[datetime] = None
+    status: str  
+    owner_id: int
 
     class Config:
         orm_mode = True
+
+
+
+class TaskUpdateStatus(BaseModel):
+    status: Optional[TaskStatus]

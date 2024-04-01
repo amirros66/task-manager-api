@@ -102,5 +102,21 @@ def delete_task_endpoint(
     delete_task_by_user(db=db, task_id=task_id, user_id=current_user.id)
     return {"message": "Task cancelled successfully"}
     
+#Update logged in user's task status
+@app.patch("/tasks/{task_id}/status", response_model=schemas.Task)
+def update_task_status_endpoint(
+    task_id: int,
+    status_update: schemas.TaskUpdateStatus,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Log incoming data
+    print(f"Updating task {task_id} status to {status_update.status}")
+    try:
+        updated_task = tasks.update_task_status(db, current_user.id, task_id, status_update.status)
+        return updated_task
+    except HTTPException as e:
+        raise e
+
 
 
