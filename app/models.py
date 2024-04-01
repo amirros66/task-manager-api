@@ -1,8 +1,17 @@
 from .database import Base
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, ForeignKey, Time
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql.sqltypes import Enum as SQLAlchemyEnum  
+
 from datetime import datetime, time
 
+
+from enum import Enum
+
+class TaskStatus(str, Enum):
+    TODO = "todo"
+    IN_PROGRESS = "inProgress"
+    COMPLETED = "completed"
 
 class User(Base):
     __tablename__ = "users"
@@ -17,20 +26,21 @@ class User(Base):
     tasks = relationship("Task", back_populates="owner")
 
 
+
 class Task(Base):
     __tablename__ = "tasks"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     description = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.now)
     due_date = Column(DateTime, nullable=True)
-    completed = Column(Boolean, default=False)
+    status = Column(SQLAlchemyEnum(TaskStatus), default=TaskStatus.TODO)  
 
-    #Foreign key, task is associated with user.
+    # Foreign key, task is associated with user.
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     
-    #Relationship, task belongs to a user
+    # Relationship, task belongs to a user
     owner = relationship("User", back_populates="tasks")
 
  #pipenv run alembic revision --autogenerate -m "First revision"
